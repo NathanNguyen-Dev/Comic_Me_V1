@@ -62,9 +62,6 @@ def main():
             # frame =  cv2.resize(frame, (384,384), interpolation = cv2.INTER_AREA)
 
             FRAMEWINDOW.image(frame)
-        else:
-            st.write('Stopped')
-
 
 if __name__ == '__main__':
     main()
