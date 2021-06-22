@@ -1,6 +1,6 @@
 import os
 from ulti import *
-model_path = os.path.join('model\ComicGenTrainEx.h5')
+model_path = os.path.join('model','ComicGenTrainEx.h5')
 @st.cache
 def model_load():
     model = tf.keras.models.load_model(model_path)
