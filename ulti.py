@@ -16,7 +16,7 @@ def adjust_gamma(image, gamma=1.0):
 
 def loadtest(image,cropornot=False):
     if cropornot:
-        Percent = st.slider('Zoom adjust', min_value=50, max_value=100,value=50,step=5)
+        Percent = st.sidebar.slider('Zoom adjust', min_value=50, max_value=100,value=50,step=5)
         cropper = Cropper(face_percent=Percent)
 
         # Get a Numpy array of the cropped image
@@ -36,17 +36,6 @@ def loadtest(image,cropornot=False):
 
 def loadframe(image):
     image = tf.convert_to_tensor(image, dtype=tf.float32)
-    # if cropframe:
-    #     frame_crop =image.numpy()
-    #     print(type(frame_crop))
-    #     cropper = Cropper()
-
-    #     # Get a Numpy array of the cropped image
-    #     frame_crop = cropper.crop(frame_crop)
-    #     if frame_crop is not None:
-    #         image = tf.convert_to_tensor(frame_crop, dtype=tf.float32)
-    #     else:
-    #         st.write('Cannot find your face to crop')
     image = (tf.cast(image, tf.float32) /255.0 *2) -1
     image = tf.image.resize(image, 
                            [256, 256],

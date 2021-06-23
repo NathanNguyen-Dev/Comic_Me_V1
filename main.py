@@ -1,5 +1,22 @@
 import os
 from ulti import *
+import threading
+# from streamlit_webrtc import (
+#     AudioProcessorBase,
+#     ClientSettings,
+#     VideoProcessorBase,
+#     WebRtcMode,
+#     webrtc_streamer,
+# )
+# import av
+
+# WEBRTC_CLIENT_SETTINGS = ClientSettings(
+#     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+#     media_stream_constraints={
+#         "video": True,
+#         "audio": False,
+#     },)
+
 model_path = os.path.join('model','ComicGenTrainEx.h5')
 @st.cache
 def model_load():
@@ -7,26 +24,42 @@ def model_load():
     return model
 
 def main():
+    st.markdown("""
+    # Welcome to Comic Me
+    ---
+    ## ❗️Time to become comic book character  ❗️
     
-    st.header('Comic Me')
-    st.write('Turn myself into a comic book character')
+    Upload your image and see yourself in a new light :low_brightness:
+    
+    :point_left: Configuration option will help if image too dark or your face is too far away. 
+
+    
+    """)
+
 
     comic_model = model_load()
 
 
-    menu = ['Image Based', 'Video Based']
+    # menu = ['Image Based', 'Video Based']
+    menu = ['Image Based']
+    st.sidebar.header('Mode Selection')
     choice = st.sidebar.selectbox('How would you like to be turn ?', menu)
 
     # Create the Home page
     if choice == 'Image Based':
+        st.sidebar.header('Configuration')
+        outputsize = st.sidebar.selectbox('Output Size', [384,512,768])
+        Autocrop = st.sidebar.checkbox('Auto Crop Image') 
+        gamma = st.sidebar.slider('Gamma adjust', min_value=0.1, max_value=3.0,value=1.0,step=0.1) # change the value here to get different result
+        
+ 
+
         Image = st.file_uploader('Upload your portrait here',type=['jpg'])
-        gamma = st.slider('Gamma adjust', min_value=0.1, max_value=3.0,value=1.0,step=0.1)
-        outputsize = st.selectbox('Output Size', [384,512,768])
         if Image is not None:
             Image = Image.read()
             Image = tf.image.decode_jpeg(Image, channels=3).numpy()
-            Autocrop = st.checkbox('Auto Crop Image')  
-                                        # change the value here to get different result
+             
+                                        
             Image = adjust_gamma(Image, gamma=gamma)
             st.image(Image)
             input_image = loadtest(Image,cropornot=Autocrop)
@@ -41,6 +74,35 @@ def main():
     
 
     elif choice == 'Video Based':
+
+    #     class OpenCVVideoProcessor(VideoProcessorBase):
+    #         def __init__(self) -> None:
+    #             self._model_lock = threading.Lock()
+    #             self.model = model_load()
+            
+    #         def recv(self, frame: av.VideoFrame):
+
+    #             img = frame.to_ndarray(format="bgr24")
+    #             img = cv2.flip(img, 1)
+    #             frame =loadframe(img)
+    #             frame = self.model(frame, training=True)
+    #             frame = tf.squeeze(frame,0)
+    #             frame = frame* 0.5 + 0.5
+    #             frame = tf.image.resize(frame, 
+    #                         [384, 384],
+    #                         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+    #             frame = frame.numpy()
+    #             print(type(frame))
+    #             print(frame.shape)
+
+    #             return av.VideoFrame.from_ndarray(frame, format="bgr24")
+
+        
+    #     webrtc_streamer(key="Test",
+    #     client_settings=WEBRTC_CLIENT_SETTINGS,
+    #     async_processing=True,video_processor_factory=OpenCVVideoProcessor,
+
+    # )
         run = st.checkbox('Run')
         FRAMEWINDOW = st.image([])
         camera = cv2.VideoCapture(0)
@@ -56,8 +118,8 @@ def main():
             frame = tf.squeeze(frame,0)
             frame = frame* 0.5 + 0.5
             frame = tf.image.resize(frame, 
-                           [384, 384],
-                           method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
+                            [384, 384],
+                            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
             frame = frame.numpy()
             # frame =  cv2.resize(frame, (384,384), interpolation = cv2.INTER_AREA)
 
