@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 tensorflow
-=======
-tensorflow-cpu==2.0.0
->>>>>>> 032af7bedcd4efac116a50175b477adc15b69226
 tensorflow-addons==0.13.0
 autocrop==1.1.1
 opencv-python-headless==4.2.0.32
