@@ -7,4 +7,5 @@ https://share.streamlit.io/nathannguyen-dev/comic_me_v1/main.py
 ## Technology Stack
 - CycleGAN
 - AutoCropper(OpenCV)
-
+## Data
+Data and Model are kept at : https://www.kaggle.com/nathannguyendev/face2comic
