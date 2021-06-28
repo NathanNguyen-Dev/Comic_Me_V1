@@ -5,7 +5,6 @@ An application that ultilize **CycleGAN** structure to turn user portrait into a
 Additionally AutoFace Cropper and Gamma adjustment was added for increased user experience.
 Deployed and ready to be tested on :
 [Streamlit Share](https://share.streamlit.io/nathannguyen-dev/comic_me_v1/main.py)
----
 ## Technology Stack
 - CycleGAN
 - AutoCropper(OpenCV)
