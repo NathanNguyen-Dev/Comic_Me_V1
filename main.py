@@ -17,7 +17,7 @@ import threading
 #         "audio": False,
 #     },)
 
-model_path = os.path.join('model','KaggleModelh5.h5')
+model_path = os.path.join('model','ModelTrainOnKaggle.h5')
 @st.cache
 def model_load():
     model = tf.keras.models.load_model(model_path)
@@ -121,8 +121,6 @@ def main():
                             [384, 384],
                             method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
             frame = frame.numpy()
-            # frame =  cv2.resize(frame, (384,384), interpolation = cv2.INTER_AREA)
-
             FRAMEWINDOW.image(frame)
 
 if __name__ == '__main__':
