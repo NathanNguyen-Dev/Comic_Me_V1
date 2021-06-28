@@ -9,5 +9,5 @@ Deployed and ready to be tested on :
 - CycleGAN
 - AutoCropper(OpenCV)
 ---
-## Data
+## Data and training
 Data and model training example can be found at [Kaggle](https://www.kaggle.com/nathannguyendev/face2comic)
