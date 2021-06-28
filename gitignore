@@ -1,1 +1,4 @@
 __pycache__/
+model/ColabTrain.h5
+model/ComicGenTrainEx.h5
+model/LastComic.h5
