@@ -8,6 +8,8 @@ Deployed and ready to be tested on :
 ## Technology Stack
 - CycleGAN
 - AutoCropper(OpenCV)
----
 ## Data and training
 Data and model training example can be found at [Kaggle](https://www.kaggle.com/nathannguyendev/face2comic)
+## References
+* Research on CycleGAN -- https://paperswithcode.com/paper/unpaired-image-to-image-translation-using
+* CycleGAN Tutorial on TPU -- https://www.kaggle.com/amyjang/monet-cyclegan-tutorial
