@@ -8,4 +8,4 @@ Deployed and ready to be tested on :
 - CycleGAN
 - AutoCropper(OpenCV)
 ## Data
-Data and Model are kept at : [Kaggle](https://www.kaggle.com/nathannguyendev/face2comic)
+Data and model training example can be found at [Kaggle](https://www.kaggle.com/nathannguyendev/face2comic)
