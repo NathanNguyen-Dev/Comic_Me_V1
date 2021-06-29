@@ -24,19 +24,14 @@ def model_load():
     return model
 
 def main():
-    st.markdown("""
-    # Welcome to Comic Me
-    ---
-    ## ❗️Time to become comic book character  ❗️
+    # st.set_page_config(layout="wide")
     
-    Upload your image and see yourself in a new light :low_brightness:
-    
-    :point_left: Configuration option will help if image too dark or your face is too far away. 
+    st.image(os.path.join('Images','Banner No2.png'), use_column_width  = True)
+    st.markdown("<h1 style='text-align: center; color: white;'>Time to become a comic book character</h1>", unsafe_allow_html=True)
+    with st.beta_expander("Configuration Option"):
 
-    
-    """)
-
-
+        st.write("**AutoCrop** is for finding and cropping your face before tunring")
+        st.write("**Gamma Adjustment** can be used to lighten/darken the image")
     comic_model = model_load()
 
 
@@ -47,21 +42,22 @@ def main():
 
     # Create the Home page
     if choice == 'Image Based':
+        
         st.sidebar.header('Configuration')
         outputsize = st.sidebar.selectbox('Output Size', [384,512,768])
-        Autocrop = st.sidebar.checkbox('Auto Crop Image') 
+        Autocrop = st.sidebar.checkbox('Auto Crop Image',value=True) 
         gamma = st.sidebar.slider('Gamma adjust', min_value=0.1, max_value=3.0,value=1.0,step=0.1) # change the value here to get different result
         
  
 
-        Image = st.file_uploader('Upload your portrait here',type=['jpg'])
+        Image = st.file_uploader('Upload your portrait here',type=['jpg','jpeg','png'])
         if Image is not None:
+            col1, col2 = st.beta_columns(2)
             Image = Image.read()
-            Image = tf.image.decode_jpeg(Image, channels=3).numpy()
-             
-                                        
+            Image = tf.image.decode_image(Image, channels=3).numpy()                  
             Image = adjust_gamma(Image, gamma=gamma)
-            st.image(Image)
+            with col1:
+                st.image(Image)
             input_image = loadtest(Image,cropornot=Autocrop)
             prediction = comic_model(input_image, training=True)
             prediction = tf.squeeze(prediction,0)
@@ -70,7 +66,8 @@ def main():
                            [outputsize, outputsize],
                            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
             prediction=  prediction.numpy()
-            st.image(prediction)
+            with col2:
+                st.image(prediction)
     
 
     elif choice == 'Video Based':
