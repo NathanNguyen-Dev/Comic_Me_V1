@@ -24,7 +24,7 @@ def model_load():
     return model
 
 def main():
-    # st.set_page_config(layout="wide")
+    st.set_page_config(layout="wide")
     
     st.image(os.path.join('Images','Banner No2.png'), use_column_width  = True)
     st.markdown("<h1 style='text-align: center; color: white;'>Time to become a comic book character</h1>", unsafe_allow_html=True)
