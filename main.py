@@ -30,7 +30,7 @@ def main():
     st.markdown("<h1 style='text-align: center; color: white;'>Time to become a comic book character</h1>", unsafe_allow_html=True)
     with st.beta_expander("Configuration Option"):
 
-        st.write("**AutoCrop** help model by finding and cropping the biggest face it can find.")
+        st.write("**AutoCrop** help the model by finding and cropping the biggest face it can find.")
         st.write("**Gamma Adjustment** can be used to lighten/darken the image")
     comic_model = model_load()
 
