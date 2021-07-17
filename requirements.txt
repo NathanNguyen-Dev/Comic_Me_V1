@@ -1,6 +1,133 @@
-tensorflow
-tensorflow-addons==0.13.0
+absl-py @ file:///C:/ci/absl-py_1623867339542/work
+aiohttp @ file:///C:/ci/aiohttp_1614361024229/work
+altair==4.1.0
+argon2-cffi==20.1.0
+astor==0.8.1
+astunparse==1.6.3
+async-generator==1.10
+async-timeout==3.0.1
+attrs @ file:///tmp/build/80754af9/attrs_1620827162558/work
 autocrop==1.1.1
-opencv-python-headless==4.2.0.32
+backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
+base58==2.1.0
+bleach==3.3.0
+blinker==1.4
+brotlipy==0.7.0
+cachetools @ file:///tmp/build/80754af9/cachetools_1619597386817/work
+certifi==2021.5.30
+cffi @ file:///C:/ci/cffi_1613247279197/work
+chardet @ file:///C:/ci/chardet_1605303225733/work
+click==7.1.2
+colorama @ file:///tmp/build/80754af9/colorama_1607707115595/work
+coverage @ file:///C:/ci/coverage_1614615074147/work
+cryptography @ file:///C:/ci/cryptography_1616769344312/work
+Cython @ file:///C:/ci/cython_1618435363327/work
+debugpy==1.3.0
+decorator @ file:///tmp/build/80754af9/decorator_1621259047763/work
+defusedxml==0.7.1
+entrypoints==0.3
+gast @ file:///tmp/build/80754af9/gast_1597433534803/work
+gitdb==4.0.7
+GitPython==3.1.18
+google-auth @ file:///tmp/build/80754af9/google-auth_1624381796952/work
+google-auth-oauthlib @ file:///tmp/build/80754af9/google-auth-oauthlib_1617120569401/work
+google-pasta==0.2.0
+grpcio @ file:///C:/ci/grpcio_1614884412260/work
+h5py==2.10.0
+idna @ file:///home/linux1/recipes/ci/idna_1610986105248/work
+importlib-metadata @ file:///C:/ci/importlib-metadata_1617877484576/work
+ipykernel==6.0.0
+ipython==7.25.0
+ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/work
+ipywidgets==7.6.3
+jedi==0.18.0
+Jinja2==3.0.1
+jsonschema==3.2.0
+jupyter==1.0.0
+jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1616770841739/work
+jupyter-console==6.4.0
+jupyter-core @ file:///C:/ci/jupyter_core_1612213356021/work
+jupyterlab-pygments==0.1.2
+jupyterlab-widgets==1.0.0
+Keras-Applications @ file:///tmp/build/80754af9/keras-applications_1594366238411/work
+Keras-Preprocessing @ file:///tmp/build/80754af9/keras-preprocessing_1612283640596/work
+Markdown @ file:///C:/ci/markdown_1614364121613/work
+MarkupSafe==2.0.1
+matplotlib-inline==0.1.2
+mistune==0.8.4
+mkl-fft==1.3.0
+mkl-random @ file:///C:/ci/mkl_random_1618854156666/work
+mkl-service==2.3.0
+multidict @ file:///C:/ci/multidict_1607362065515/work
+nbclient==0.5.3
+nbconvert==6.1.0
+nbformat==5.1.3
+nest-asyncio==1.5.1
+notebook==6.4.0
+numpy @ file:///C:/ci/numpy_and_numpy_base_1620833114945/work
+oauthlib==3.1.0
+opencv-python==4.5.2.54
+opt-einsum @ file:///tmp/build/80754af9/opt_einsum_1621500238896/work
+packaging==20.9
+pandas==1.2.5
+pandocfilters==1.4.3
+parso @ file:///tmp/build/80754af9/parso_1617223946239/work
+pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
 Pillow==8.1.2
-streamlit==0.83.0
+prometheus-client==0.11.0
+prompt-toolkit==3.0.19
+protobuf==3.14.0
+pyarrow==4.0.1
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pydeck==0.6.2
+Pygments @ file:///tmp/build/80754af9/pygments_1621606182707/work
+PyJWT==1.7.1
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
+pyparsing==2.4.7
+pyreadline==2.1
+pyrsistent==0.18.0
+PySocks @ file:///C:/ci/pysocks_1605287845585/work
+python-dateutil @ file:///home/ktietz/src/ci/python-dateutil_1611928101742/work
+pytz==2021.1
+pywin32==301
+pywinpty==1.1.3
+pyzmq==22.1.0
+qtconsole==5.1.1
+QtPy==1.9.0
+requests @ file:///tmp/build/80754af9/requests_1608241421344/work
+requests-oauthlib==1.3.0
+rsa @ file:///tmp/build/80754af9/rsa_1614366226499/work
+scipy @ file:///C:/ci/scipy_1618856128765/work
+Send2Trash==1.7.1
+six @ file:///tmp/build/80754af9/six_1623709665295/work
+smmap==4.0.0
+streamlit==0.84.0
+tensorboard @ file:///home/builder/ktietz/aggregate/tensorflow_recipes/ci_te/tensorboard_1614593728657/work/tmp_pip_dir
+tensorboard-plugin-wit==1.6.0
+tensorflow==2.3.0
+tensorflow-addons==0.13.0
+tensorflow-estimator @ file:///home/builder/ktietz/aggregate/tensorflow_recipes/ci_baze37/tensorflow-estimator_1622026529081/work/tensorflow_estimator-2.5.0-py2.py3-none-any.whl
+termcolor==1.1.0
+terminado==0.10.1
+testpath==0.5.0
+toml==0.10.2
+toolz==0.11.1
+tornado @ file:///C:/ci/tornado_1606942392901/work
+traitlets @ file:///home/ktietz/src/ci/traitlets_1611929699868/work
+typeguard==2.12.1
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1624965014186/work
+tzlocal==2.1
+urllib3 @ file:///tmp/build/80754af9/urllib3_1625084269274/work
+validators==0.18.2
+watchdog==2.1.3
+wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
+webencodings==0.5.1
+Werkzeug @ file:///home/ktietz/src/ci/werkzeug_1611932622770/work
+widgetsnbextension==3.5.1
+win-inet-pton @ file:///C:/ci/win_inet_pton_1605306167264/work
+wincertstore==0.2
+wrapt==1.12.1
+yarl @ file:///C:/ci/yarl_1606940076464/work
+zipp @ file:///tmp/build/80754af9/zipp_1615904174917/work
