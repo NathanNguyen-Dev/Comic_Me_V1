@@ -95,7 +95,7 @@ six
 smmap==4.0.0
 streamlit==0.84.0
 tensorboard 
-tensorboard-plugin-wit==1.6.0
+tensorboard-plugin-wit
 tensorflow==2.3.0
 tensorflow-addons==0.13.0
 tensorflow-estimator 
