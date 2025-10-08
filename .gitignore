@@ -1,4 +1,14 @@
 __pycache__/
-model/ColabTrain.h5
-model/ComicGenTrainEx.h5
-model/LastComic.h5
+*.pyc
+*.pyo
+*.pyd
+*.DS_Store
+.env
+.venv
+venv/
+ENV/
+.env.local
+.cache/
+model/*.h5
+model/*.hdf5
+.ipynb_checkpoints/
