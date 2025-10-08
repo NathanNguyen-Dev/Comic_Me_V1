@@ -1,124 +1,132 @@
+"""Streamlit entrypoint for the Comic Me application."""
+from __future__ import annotations
+
 import os
-from ulti import *
-import threading
-# from streamlit_webrtc import (
-#     AudioProcessorBase,
-#     ClientSettings,
-#     VideoProcessorBase,
-#     WebRtcMode,
-#     webrtc_streamer,
-# )
-# import av
+from typing import Optional
 
-# WEBRTC_CLIENT_SETTINGS = ClientSettings(
-#     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-#     media_stream_constraints={
-#         "video": True,
-#         "audio": False,
-#     },)
+import cv2
+import streamlit as st
+import tensorflow as tf
 
-model_path = os.path.join('model','ModelTrainOnKaggle.h5')
-@st.cache
-def model_load():
-    model = tf.keras.models.load_model(model_path)
-    return model
+from ulti import adjust_gamma, load_frame_for_model, load_image_for_model
 
-def main():
+MODEL_PATH = os.path.join("model", "ModelTrainOnKaggle.h5")
+
+
+@st.cache_resource(show_spinner=True)
+def load_model() -> tf.keras.Model:
+    """Load the pre-trained CycleGAN model used for inference."""
+    if not os.path.exists(MODEL_PATH):
+        raise FileNotFoundError(
+            "Expected the model weights to be available at 'model/ModelTrainOnKaggle.h5'."
+        )
+    return tf.keras.models.load_model(MODEL_PATH)
+
+
+def render_intro() -> None:
+    """Render the static introduction components."""
     st.set_page_config(layout="wide")
-    
-    st.image(os.path.join('Images','Banner No2.png'), use_column_width  = True)
-    st.markdown("<h1 style='text-align: center; color: white;'>Time to become a comic book character</h1>", unsafe_allow_html=True)
-    with st.beta_expander("Configuration Option"):
+    st.image(os.path.join("Images", "Banner No2.png"), use_column_width=True)
+    st.markdown(
+        "<h1 style='text-align: center; color: white;'>Time to become a comic book character</h1>",
+        unsafe_allow_html=True,
+    )
+    with st.expander("Configuration Options"):
+        st.write("**AutoCrop** helps the model by finding and cropping the largest detectable face.")
+        st.write("**Gamma Adjustment** can be used to lighten or darken the image.")
 
-        st.write("**AutoCrop** help the model by finding and cropping the biggest face it can find.")
-        st.write("**Gamma Adjustment** can be used to lighten/darken the image")
-    comic_model = model_load()
+
+def render_image_mode(model: tf.keras.Model) -> None:
+    """UI for converting an uploaded portrait to a comic styled image."""
+    st.sidebar.header("Configuration")
+    output_size = st.sidebar.selectbox("Output Size", options=[384, 512, 768], index=0)
+    auto_crop = st.sidebar.checkbox("Auto Crop Image", value=True)
+    zoom_percent: Optional[int] = None
+    if auto_crop:
+        zoom_percent = st.sidebar.slider(
+            "Zoom adjust", min_value=50, max_value=100, value=50, step=5
+        )
+    gamma = st.sidebar.slider(
+        "Gamma adjust", min_value=0.1, max_value=3.0, value=1.0, step=0.1
+    )
+
+    uploaded_file = st.file_uploader(
+        "Upload your portrait here", type=["jpg", "jpeg", "png"]
+    )
+
+    if uploaded_file is None:
+        st.info("Upload an image to start the transformation.")
+        return
+
+    col1, col2 = st.columns(2)
+    image_bytes = uploaded_file.read()
+    decoded_image = tf.image.decode_image(image_bytes, channels=3)
+    decoded_image = decoded_image.numpy()
+    adjusted_image = adjust_gamma(decoded_image, gamma=gamma)
+
+    with col1:
+        st.image(adjusted_image, caption="Original", use_column_width=True)
+
+    input_tensor = load_image_for_model(
+        adjusted_image,
+        crop_enabled=auto_crop,
+        zoom_percent=zoom_percent,
+    )
+
+    prediction = model(input_tensor, training=False)
+    prediction = tf.squeeze(prediction, 0)
+    prediction = (prediction * 0.5) + 0.5
+    prediction = tf.image.resize(
+        prediction,
+        [output_size, output_size],
+        method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
+    )
+
+    with col2:
+        st.image(prediction.numpy(), caption="Comic style", use_column_width=True)
 
 
-    # menu = ['Image Based', 'Video Based']
-    menu = ['Image Based']
-    st.sidebar.header('Mode Selection')
-    choice = st.sidebar.selectbox('How would you like to be turn ?', menu)
+def render_video_mode(model: tf.keras.Model) -> None:
+    """UI for the optional video-based transformation mode."""
+    run = st.checkbox("Run")
+    frame_window = st.image([])
+    camera = cv2.VideoCapture(0)
+    gamma = st.slider(
+        "Gamma adjust", min_value=0.1, max_value=3.0, value=1.0, step=0.1
+    )
 
-    # Create the Home page
-    if choice == 'Image Based':
-        
-        st.sidebar.header('Configuration')
-        outputsize = st.sidebar.selectbox('Output Size', [384,512,768])
-        Autocrop = st.sidebar.checkbox('Auto Crop Image',value=True) 
-        gamma = st.sidebar.slider('Gamma adjust', min_value=0.1, max_value=3.0,value=1.0,step=0.1) # change the value here to get different result
-        
- 
+    while run:
+        _, frame = camera.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = cv2.flip(frame, 1)
+        frame = adjust_gamma(frame, gamma=gamma)
+        frame_tensor = load_frame_for_model(frame)
+        prediction = model(frame_tensor, training=False)
+        prediction = tf.squeeze(prediction, 0)
+        prediction = (prediction * 0.5) + 0.5
+        prediction = tf.image.resize(
+            prediction,
+            [384, 384],
+            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR,
+        )
+        frame_window.image(prediction.numpy())
 
-        Image = st.file_uploader('Upload your portrait here',type=['jpg','jpeg','png'])
-        if Image is not None:
-            col1, col2 = st.beta_columns(2)
-            Image = Image.read()
-            Image = tf.image.decode_image(Image, channels=3).numpy()                  
-            Image = adjust_gamma(Image, gamma=gamma)
-            with col1:
-                st.image(Image)
-            input_image = loadtest(Image,cropornot=Autocrop)
-            prediction = comic_model(input_image, training=True)
-            prediction = tf.squeeze(prediction,0)
-            prediction = prediction* 0.5 + 0.5
-            prediction = tf.image.resize(prediction, 
-                           [outputsize, outputsize],
-                           method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-            prediction=  prediction.numpy()
-            with col2:
-                st.image(prediction)
-    
+    camera.release()
 
-    elif choice == 'Video Based':
 
-    #     class OpenCVVideoProcessor(VideoProcessorBase):
-    #         def __init__(self) -> None:
-    #             self._model_lock = threading.Lock()
-    #             self.model = model_load()
-            
-    #         def recv(self, frame: av.VideoFrame):
+def main() -> None:
+    render_intro()
+    model = load_model()
 
-    #             img = frame.to_ndarray(format="bgr24")
-    #             img = cv2.flip(img, 1)
-    #             frame =loadframe(img)
-    #             frame = self.model(frame, training=True)
-    #             frame = tf.squeeze(frame,0)
-    #             frame = frame* 0.5 + 0.5
-    #             frame = tf.image.resize(frame, 
-    #                         [384, 384],
-    #                         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-    #             frame = frame.numpy()
-    #             print(type(frame))
-    #             print(frame.shape)
+    menu = ["Image Based"]
+    st.sidebar.header("Mode Selection")
+    choice = st.sidebar.selectbox("How would you like to be turned?", menu)
 
-    #             return av.VideoFrame.from_ndarray(frame, format="bgr24")
+    if choice == "Image Based":
+        render_image_mode(model)
+    elif choice == "Video Based":
+        render_video_mode(model)
 
-        
-    #     webrtc_streamer(key="Test",
-    #     client_settings=WEBRTC_CLIENT_SETTINGS,
-    #     async_processing=True,video_processor_factory=OpenCVVideoProcessor,
 
-    # )
-        run = st.checkbox('Run')
-        FRAMEWINDOW = st.image([])
-        camera = cv2.VideoCapture(0)
-        gamma = st.slider('Gamma adjust', min_value=0.1, max_value=3.0,value=1.0,step=0.1)
-        while run:
-            _ , frame = camera.read()
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame  = cv2.flip(frame, 1)
-            frame = adjust_gamma(frame, gamma=gamma)
-            # Framecrop = st.checkbox('Auto Crop Frame')
-            frame = loadframe(frame)
-            frame = comic_model(frame, training=True)
-            frame = tf.squeeze(frame,0)
-            frame = frame* 0.5 + 0.5
-            frame = tf.image.resize(frame, 
-                            [384, 384],
-                            method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-            frame = frame.numpy()
-            FRAMEWINDOW.image(frame)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
